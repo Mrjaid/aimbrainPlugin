@@ -1,0 +1,17 @@
+{
+  "name": "com.fasyl.aimbrainplugin",
+  "version": "1.0.0",
+  "description": "A fasyl plugin for integrating with Aimbrain",
+  "cordova": {
+    "id": "com.fasyl.aimbrainplugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Maduemesi Jideofor Obinna",
+  "license": "ISC"
+}

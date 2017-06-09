@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.fasyl.aimbrainplugin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<name>aimbrainPlugin</name>
+<js-module name="aimbrainPlugin" src="www/aimbrainPlugin.js">
+<clobbers target="cordova.plugins.aimbrainPlugin" />
+</js-module>
+<platform name="android">
+<config-file parent="/*" target="res/xml/config.xml">
+<feature name="aimbrainPlugin">
+<param name="android-package" value="com.fasyl.aimbrainplugin.aimbrainPlugin" />
+</feature>
+</config-file>
+<config-file parent="/*" target="AndroidManifest.xml">
+</config-file>
+<source-file src="src/android/aimbrainPlugin.java" target-dir="src/com/fasyl/aimbrainplugin/aimbrainPlugin" />
+<source-file src="src/android/FacialAuthentication.java" target-dir="src/com/fasyl/aimbrainplugin/aimbrainPlugin" />
+<source-file src="src/android/FacialEnrollment.java" target-dir="src/com/fasyl/aimbrainplugin/aimbrainPlugin" />
+<source-file src="src/android/IntegrationCallback.java" target-dir="src/com/fasyl/aimbrainplugin/aimbrainPlugin" />
+<source-file src="src/android/IntegrationInterface.java" target-dir="src/com/fasyl/aimbrainplugin/aimbrainPlugin" />
+</platform>
+</plugin>	
