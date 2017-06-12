@@ -1,7 +1,4 @@
-
-
-cordova.define("com.fasyl.aimbrainplugin.aimbrainPlugin", function (require, exports, module) {
-    module.exports = {
+module.exports = {
         enrol: function (arg0, success, error) {
             cordova.exec(success, error, 'aimbrainPlugin', "enrol", [arg0]);
         },
@@ -9,4 +6,3 @@ cordova.define("com.fasyl.aimbrainplugin.aimbrainPlugin", function (require, exp
             cordova.exec(success, error, 'aimbrainPlugin', "authenticate", [arg0]);
         }
     };
-});
