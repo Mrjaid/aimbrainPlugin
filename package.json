@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A fasyl plugin for integrating with Aimbrain",
   "cordova": {
-    "id": "com.fasyl.aimbrainplugin.aimbrainPlugin",
+    "id": "com.fasyl.aimbrainplugin",
     "platforms": [
       "android"
     ]
