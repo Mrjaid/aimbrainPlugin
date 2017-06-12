@@ -1,4 +1,4 @@
-package com.fasyl.aimbrainplugin.aimbrainPlugin;
+package com.fasyl.aimbrainplugin;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.fasyl.aimbrainplugin.aimbrainPlugin;
+package com.fasyl.aimbrainplugin;
 
 import com.aimbrain.sdk.models.FaceAuthenticateModel;
 import com.android.volley.VolleyError;
