@@ -19,11 +19,10 @@
     <uses-feature android:name="android.hardware.camera.front" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.microphone" />
-	
-	 <activity android:name="com.aimbrain.sdk.faceCapture.VideoFaceCaptureActivity" />
+	  </config-file>
+<config-file parent="/manifest/application" target="AndroidManifest.xml">
+<activity android:name="com.aimbrain.sdk.faceCapture.VideoFaceCaptureActivity" />
         <activity android:name="com.aimbrain.sdk.faceCapture.PhotoFaceCaptureActivity" />
-        </config-file>
-<config-file parent="/*" target="AndroidManifest.xml">
 </config-file>
 <source-file src="src/android/aimbrainPlugin.java" target-dir="src/com/fasyl/aimbrainplugin" />
 <source-file src="src/android/FacialAuthentication.java" target-dir="src/com/fasyl/aimbrainplugin" />
