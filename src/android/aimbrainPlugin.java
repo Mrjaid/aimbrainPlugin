@@ -19,19 +19,19 @@ public class aimbrainPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("enrol")) {
-            String userId = args.getString(0);
-            this.enrol(userId, callbackContext);
+            this.enrol(args, callbackContext);
             return true;
         }
         if (action.equals("authenticate")) {
             String userId = args.getString(0);
-            this.authenticate(userId, callbackContext);
+            this.authenticate(args, callbackContext);
             return true;
         }
         return false;
     }
 
-    private void enrol(String userId,final CallbackContext callbackContext) {
+    private void enrol(JSONArray args,final CallbackContext callbackContext) throws JSONException {
+        String userId = args.getString(0);
         if (userId != null && userId.length() > 0) {
 
             IntegrationCallback callback = new IntegrationCallback() {
@@ -50,14 +50,15 @@ public class aimbrainPlugin extends CordovaPlugin {
             Activity act = cordova.getActivity();
             IntegrationInterface.userId=userId;
             IntegrationInterface.context = cordova.getActivity().getApplicationContext();
-            IntegrationInterface.enrolUser(act,callback);
+            IntegrationInterface.enrolUser(act,callback,args.getString(1),args.getString(2));
             cordova.setActivityResultCallback(this);
         } else {
             callbackContext.error("userId expected.");
         }
     }
 
-    private void authenticate(String userId,final CallbackContext callbackContext) {
+    private void authenticate(JSONArray args,final CallbackContext callbackContext) throws JSONException {
+        String userId = args.getString(0);
         if (userId != null && userId.length() > 0) {
 
             IntegrationCallback callback = new IntegrationCallback() {
@@ -74,7 +75,7 @@ public class aimbrainPlugin extends CordovaPlugin {
             Activity act = cordova.getActivity();
             IntegrationInterface.userId=userId;
             IntegrationInterface.context = cordova.getActivity().getApplicationContext();
-            IntegrationInterface.authenticateUser(act,callback);
+            IntegrationInterface.authenticateUser(act,callback,args.getString(1),args.getString(2));
             cordova.setActivityResultCallback(this);
         } else {
             callbackContext.error("userId expected.");

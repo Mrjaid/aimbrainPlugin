@@ -24,21 +24,21 @@ public class FacialAuthentication{
     Manager manager;
     IntegrationCallback authenticationCallback= null;
 
-    public void authenticateUserInit() {
+    public void authenticateUserInit(String apiKey,String APISecret) {
         if(IntegrationInterface.authoCallback!=null){
             authenticationCallback = IntegrationInterface.authoCallback;
         }
-        initAimbrainSessionAndStartCapture(IntegrationInterface.userId, IntegrationInterface.context);
+        initAimbrainSessionAndStartCapture(IntegrationInterface.userId, IntegrationInterface.context,apiKey,APISecret);
     }
 
 
 
 
-    private void initAimbrainSessionAndStartCapture(String userId,Context context){
+    private void initAimbrainSessionAndStartCapture(String userId,Context context,String apiKey,String APISecret){
         try {
             System.out.println("about to create session context  is"+context);
             manager =  Manager.getInstance();
-            manager.configure("b0398393-1039-4100-acdc-e0fe7a8bf9d0", "89bbb313760f4e58a02fbc02343d6413335da9d69f72475087e81148e3815521");
+            manager.configure(apiKey, APISecret);
             manager.createSession(userId,context,new SessionCallback(){
                 @Override
                 public void onSessionCreated(SessionModel session) {
@@ -76,10 +76,10 @@ public class FacialAuthentication{
     }
 
     protected void processResult(int requestCode, int resultCode, Intent data) {
-       // IntegrationInterface.act.onActivityResult(requestCode, resultCode, data);
-       // if(requestCode == videoRequestCode && resultCode == RESULT_OK){
-            authenticateUser();
-       // }
+        // IntegrationInterface.act.onActivityResult(requestCode, resultCode, data);
+        // if(requestCode == videoRequestCode && resultCode == RESULT_OK){
+        authenticateUser();
+        // }
     }
 
     private void authenticateUser(){

@@ -15,7 +15,7 @@ public class IntegrationInterface {
     static String userId;
     static Context context;
     static Activity act;
-    public static void authenticateUser(Activity activity,final IntegrationCallback callback){
+    public static void authenticateUser(Activity activity,final IntegrationCallback callback,String apiKey,String APISecret){
         authoCallback=new IntegrationCallback() {
             @Override
             public void onSuccess(int authResult) {
@@ -31,10 +31,10 @@ public class IntegrationInterface {
         };
         act=activity;
         FacialAuthentication auth = new FacialAuthentication();
-        auth.authenticateUserInit();
+        auth.authenticateUserInit(apiKey,APISecret);
     }
 
-    public static void enrolUser(Activity activity,final IntegrationCallback callback){
+    public static void enrolUser(Activity activity,final IntegrationCallback callback,String apiKey,String APISecret){
         authoCallback=new IntegrationCallback() {
             @Override
             public void onSuccess(int authResult) {
@@ -50,7 +50,7 @@ public class IntegrationInterface {
         };
         act=activity;
         FacialEnrollment enrol = new FacialEnrollment();
-        enrol.initEnrolment();
+        enrol.initEnrolment(apiKey,APISecret);
     }
 }
 

@@ -48,8 +48,8 @@ public class FacialEnrollment {
     int captureStage=1;
     IntegrationCallback authenticationCallback= null;
 
-    protected void initEnrolment() {
-        initAimbrainSessionAndStartCapture(IntegrationInterface.userId, IntegrationInterface.context);
+    protected void initEnrolment(String apiKey,String APISecret) {
+        initAimbrainSessionAndStartCapture(IntegrationInterface.userId, IntegrationInterface.context,apiKey,APISecret);
 
     }
 
@@ -93,11 +93,11 @@ public class FacialEnrollment {
     }
 
 
-    private void initAimbrainSessionAndStartCapture(String userId,Context context){
+    private void initAimbrainSessionAndStartCapture(String userId,Context context,String apiKey,String APISecret){
         try {
             System.out.println("about to create session userID is"+userId);
             manager =  Manager.getInstance();
-            manager.configure("b0398393-1039-4100-acdc-e0fe7a8bf9d0", "89bbb313760f4e58a02fbc02343d6413335da9d69f72475087e81148e3815521");
+            manager.configure(apiKey,APISecret);
 
             manager.createSession(userId,context,new SessionCallback(){
                 @Override
