@@ -23,6 +23,7 @@ public class FacialAuthentication{
     int videoRequestCode;
     Manager manager;
     IntegrationCallback authenticationCallback= null;
+
     public void authenticateUserInit() {
         if(IntegrationInterface.authoCallback!=null){
             authenticationCallback = IntegrationInterface.authoCallback;
@@ -35,7 +36,7 @@ public class FacialAuthentication{
 
     private void initAimbrainSessionAndStartCapture(String userId,Context context){
         try {
-            System.out.println("about to create session userID is"+userId);
+            System.out.println("about to create session context  is"+context);
             manager =  Manager.getInstance();
             manager.configure("b0398393-1039-4100-acdc-e0fe7a8bf9d0", "89bbb313760f4e58a02fbc02343d6413335da9d69f72475087e81148e3815521");
             manager.createSession(userId,context,new SessionCallback(){
@@ -62,9 +63,19 @@ public class FacialAuthentication{
         videoRequestCode = new FacialEnrollment().getNewRequestId();
         IntegrationInterface.act.startActivityForResult(intent, videoRequestCode);
 
+        aimbrainPlugin.resultCallBack = new ActivityResultCallBackInterFace() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+                processResult(requestCode,resultCode,intent);
+            }
+        };
+        if(IntegrationInterface.authoCallback!=null){
+            authenticationCallback = IntegrationInterface.authoCallback;
+        }
+
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void processResult(int requestCode, int resultCode, Intent data) {
        // IntegrationInterface.act.onActivityResult(requestCode, resultCode, data);
        // if(requestCode == videoRequestCode && resultCode == RESULT_OK){
             authenticateUser();
@@ -95,11 +106,11 @@ public class FacialAuthentication{
                 }
             });
         } catch (InternalException e) {
-            e.printStackTrace();
+            authenticationCallback.onFailure(e.getMessage());
         } catch (ConnectException e) {
-            e.printStackTrace();
+            authenticationCallback.onFailure(e.getMessage());
         } catch (SessionException e) {
-            e.printStackTrace();
+            authenticationCallback.onFailure(e.getMessage());
         }
     }
 

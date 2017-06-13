@@ -34,7 +34,7 @@ public class IntegrationInterface {
         auth.authenticateUserInit();
     }
 
-    public static void enrolUser(Activity act,final IntegrationCallback callback){
+    public static void enrolUser(Activity activity,final IntegrationCallback callback){
         authoCallback=new IntegrationCallback() {
             @Override
             public void onSuccess(int authResult) {
@@ -48,8 +48,9 @@ public class IntegrationInterface {
                 callback.onFailure(error);
             }
         };
-        Intent intent = new Intent("mybankauthenticator.fasyl.com.mybankauthenticator.aimbrainAuthentication.FacialEnrolment");
-        act.startActivity(intent);
+        act=activity;
+        FacialEnrollment enrol = new FacialEnrollment();
+        enrol.initEnrolment();
     }
 }
 

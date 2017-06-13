@@ -1,7 +1,9 @@
 package com.fasyl.aimbrainplugin;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -36,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class FacialEnrollment extends Activity {
+public class FacialEnrollment {
     SessionModel sessionModel;
     String userId;
     int videoRequestCode;
@@ -44,44 +46,48 @@ public class FacialEnrollment extends Activity {
     Manager manager;
     public static byte[] video;
     int captureStage=1;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initAimbrainSessionAndStartCapture(userId, this);
+    IntegrationCallback authenticationCallback= null;
+
+    protected void initEnrolment() {
+        initAimbrainSessionAndStartCapture(IntegrationInterface.userId, IntegrationInterface.context);
+
     }
 
 
-
-
-
-
-
-
     private void videoCapture(){
-        Intent intent = new Intent(this, VideoFaceCaptureActivity.class);
+        Toast.makeText(IntegrationInterface.context, "about to init video *** capture stage is "+captureStage, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(IntegrationInterface.act, VideoFaceCaptureActivity.class);
         intent.putExtra(VideoFaceCaptureActivity.EXTRA_UPPER_TEXT, "Enrolment Capture "+captureStage+" of 5.");
         intent.putExtra(VideoFaceCaptureActivity.EXTRA_LOWER_TEXT, getCaptureText(captureStage));
         intent.putExtra(VideoFaceCaptureActivity.EXTRA_DURATION_MILLIS, 2000);
         intent.putExtra(VideoFaceCaptureActivity.EXTRA_RECORDING_HINT, "Please slowly blink both eyes now ...");
         videoRequestCode = getNewRequestId();
-        startActivityForResult(intent, videoRequestCode);
+        IntegrationInterface.act.startActivityForResult(intent, videoRequestCode);
+        aimbrainPlugin.resultCallBack = new ActivityResultCallBackInterFace() {
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+                processResult(requestCode,resultCode,intent);
+            }
+        };
+        if(IntegrationInterface.authoCallback!=null){
+            authenticationCallback = IntegrationInterface.authoCallback;
+        }
     }
 
     private void photoCapture(){
-         Intent intent = new Intent(this, PhotoFaceCaptureActivity.class);
+        Intent intent = new Intent(IntegrationInterface.act, PhotoFaceCaptureActivity.class);
         intent.putExtra("upperText", "Photo Capture");
         intent.putExtra("lowerText", "Please Position your face within the Frame");
         intent.putExtra("recordingHint","Please keep your head still..");
         photoRequestCode = getNewRequestId();
-        startActivityForResult(intent, photoRequestCode);
+        IntegrationInterface.act.startActivityForResult(intent, photoRequestCode);
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == videoRequestCode && resultCode == RESULT_OK){
+    public void processResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == videoRequestCode){
             this.video = VideoFaceCaptureActivity.video;
             enrolUser();
-        }else if(requestCode == photoRequestCode && resultCode == RESULT_OK){
+        }else if(requestCode == photoRequestCode){
             videoCapture();
         }
     }
@@ -101,43 +107,59 @@ public class FacialEnrollment extends Activity {
                 }
             });
         } catch (InternalException e) {
-            initBiometricCapture();
-            // e.printStackTrace();
+            authenticationCallback.onFailure(e.getMessage());
         } catch (ConnectException e) {
-            initBiometricCapture();
-            // e.printStackTrace();
+            authenticationCallback.onFailure(e.getMessage());
         }
     }
 
     private void enrolUser() {
-        // Intent intent = new Intent("mybankauthenticator.fasyl.com.mybankauthenticator.activities.FaceLoader");
-        //  startActivity(intent);
         try {
             Manager.getInstance().sendProvidedFaceCapturesToEnroll(VideoFaceCaptureActivity.video, new FaceCapturesEnrollCallback() {
                 @Override
                 public void success(FaceEnrollModel faceEnrollModel) {
+                    System.out.print("success response gotten for stage "+captureStage);
                     if(captureStage<5){
                         ++captureStage;
                         videoCapture();
                     }else {
-                        handleCaptureSuccess(null);
+                        authenticationCallback.onSuccess(1);
                     }
                 }
 
                 @Override
                 public void failure(VolleyError volleyError) {
-                    handleFacialCaptureError(null);
+                    System.out.print("failure response gotten for stage "+captureStage);
+                    authenticationCallback.onFailure(volleyError.getMessage());
                 }
             });
         } catch (InternalException e) {
-            e.printStackTrace();
+            System.out.print("exception  gotten for stage "+captureStage);
+            authenticationCallback.onFailure(e.getMessage());
         } catch (ConnectException e) {
-            //   e.printStackTrace();
-            initBiometricCapture();
+            System.out.print("exception  gotten for stage "+captureStage);
+            authenticationCallback.onFailure(e.getMessage());
         } catch (SessionException e) {
-            initBiometricCapture();
-            //  e.printStackTrace();
+            System.out.print("exception  gotten for stage "+captureStage);
+            authenticationCallback.onFailure(e.getMessage());
         }
+    }
+
+    private void displayDialog(String message){
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(IntegrationInterface.act);
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(message)
+                .setTitle("");
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                initBiometricCapture();
+            }
+        });
+// 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
     }
 
     private void handleCaptureSuccess(FaceEnrollModel faceEnrollModel){
@@ -166,21 +188,7 @@ public class FacialEnrollment extends Activity {
         return "";
     }
 
-    private void handleFacialCaptureError(VolleyError volleyError){
-    // call back plugin
-    }
 
-    private String getNextId(){
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 11) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        String saltStr = salt.toString();
-        return saltStr;
-    }
 
     public int getNewRequestId(){
         SecureRandom random = new SecureRandom();
