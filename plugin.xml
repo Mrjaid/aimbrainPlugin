@@ -10,16 +10,20 @@
 <param name="android-package" value="com.fasyl.aimbrainplugin.aimbrainPlugin" />
 </feature>
 </config-file>
- <config-file target="AndroidManifest.xml" parent="/*">
+ <edit-config target="AndroidManifest.xml" parent="/*" mode="merge">
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-feature android:name="android.hardware.camera" />
+   
+	  </edit-config>
+	  <edit-config target="AndroidManifest.xml" parent="/*" mode="merge">
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.front" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.microphone" />
-	  </config-file>
+	  </edit-config>
 <config-file parent="/manifest/application" target="AndroidManifest.xml">
 <activity android:name="com.aimbrain.sdk.faceCapture.VideoFaceCaptureActivity" />
         <activity android:name="com.aimbrain.sdk.faceCapture.PhotoFaceCaptureActivity" />
