@@ -8,6 +8,10 @@
       "android"
     ]
   },
+  "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Mrjaid/aimbrainPlugin.git"
+    },
   "keywords": [
     "ecosystem:cordova",
     "cordova-android"
