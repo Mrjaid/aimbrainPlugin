@@ -15,7 +15,7 @@ import org.json.JSONException;
  * This class echoes a string called from JavaScript.
  */
 public class aimbrainPlugin extends CordovaPlugin {
-    public static ActivityResultCallBackInterFace resultCallBack;
+    public static IntegrationInterface resultCallBack;
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("enrol")) {
