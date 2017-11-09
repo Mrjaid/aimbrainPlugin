@@ -24,9 +24,11 @@
 <activity android:name="com.aimbrain.sdk.faceCapture.VideoFaceCaptureActivity" />
         <activity android:name="com.aimbrain.sdk.faceCapture.PhotoFaceCaptureActivity" />
 </config-file>
+<!--
 <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
       <application android:name="com.aimbrain.sdk.AMBNApplication.AMBNApplication"/>
 </edit-config>
+-->
 <source-file src="src/android/aimbrainPlugin.java" target-dir="src/com/fasyl/aimbrainplugin" />
 <source-file src="src/android/FacialAuthentication.java" target-dir="src/com/fasyl/aimbrainplugin" />
 <source-file src="src/android/FacialEnrollment.java" target-dir="src/com/fasyl/aimbrainplugin" />
