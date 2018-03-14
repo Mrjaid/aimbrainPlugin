@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7bfa535f-355d-44a5-91f4-f9dc4eaef1c9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/FacialAuthentication.java" afterPath="$PROJECT_DIR$/src/android/FacialAuthentication.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/IntegrationInterface.java" afterPath="$PROJECT_DIR$/src/android/IntegrationInterface.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/android/aimbrainPlugin.java" afterPath="$PROJECT_DIR$/src/android/aimbrainPlugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/aimbrainPlugin.js" afterPath="$PROJECT_DIR$/www/aimbrainPlugin.js" />
-    </list>
+    <list default="true" id="7bfa535f-355d-44a5-91f4-f9dc4eaef1c9" name="Default" comment="" />
     <ignored path="aimbrainPlugin.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -310,7 +303,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521059516022" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521061598470" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -358,7 +351,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521059516023" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521061598470" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
