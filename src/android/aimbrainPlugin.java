@@ -26,6 +26,10 @@ public class aimbrainPlugin extends CordovaPlugin {
             String userId = args.getString(0);
             this.authenticate(args, callbackContext);
             return true;
+        }if (action.equals("authenticateImage")) {
+            String userId = args.getString(0);
+            this.authenticateImage(args, callbackContext);
+            return true;
         }
         return false;
     }
@@ -76,6 +80,32 @@ public class aimbrainPlugin extends CordovaPlugin {
             IntegrationInterface.userId=userId;
             IntegrationInterface.context = cordova.getActivity().getApplicationContext();
             IntegrationInterface.authenticateUser(act,callback,args.getString(1),args.getString(2));
+            cordova.setActivityResultCallback(this);
+        } else {
+            callbackContext.error("userId expected.");
+        }
+
+    }
+
+    private void authenticateImage(JSONArray args,final CallbackContext callbackContext) throws JSONException {
+        String userId = args.getString(0);
+        if (userId != null && userId.length() > 0) {
+
+            IntegrationCallback callback = new IntegrationCallback() {
+                @Override
+                public void onSuccess(int authResult) {
+                    callbackContext.success(authResult);
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    callbackContext.error(error);
+                }
+            };
+            Activity act = cordova.getActivity();
+            IntegrationInterface.userId=userId;
+            IntegrationInterface.context = cordova.getActivity().getApplicationContext();
+            IntegrationInterface.authenticateImage(act,callback,args.getString(1),args.getString(2),args.getString(3));
             cordova.setActivityResultCallback(this);
         } else {
             callbackContext.error("userId expected.");

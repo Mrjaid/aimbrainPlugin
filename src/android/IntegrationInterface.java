@@ -34,6 +34,25 @@ public class IntegrationInterface {
         auth.authenticateUserInit(apiKey,APISecret);
     }
 
+    public static void authenticateImage(Activity activity,final IntegrationCallback callback,String apiKey,String APISecret,String base64){
+        authoCallback=new IntegrationCallback() {
+            @Override
+            public void onSuccess(int authResult) {
+                authoCallback = null;
+                callback.onSuccess(authResult);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                authoCallback = null;
+                callback.onFailure(error);
+            }
+        };
+        act=activity;
+        ImageAuthentication auth = new ImageAuthentication();
+        auth.authenticateUserInit(apiKey,APISecret,base64);
+    }
+
     public static void enrolUser(Activity activity,final IntegrationCallback callback,String apiKey,String APISecret){
         authoCallback=new IntegrationCallback() {
             @Override

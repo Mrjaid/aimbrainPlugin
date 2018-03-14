@@ -19,12 +19,14 @@ import java.net.ConnectException;
 
 
 
-public class FacialAuthentication{
+public class ImageAuthentication {
     int videoRequestCode;
     Manager manager;
     IntegrationCallback authenticationCallback= null;
+    String  base64 = null;
 
-    public void authenticateUserInit(String apiKey,String APISecret) {
+    public void authenticateUserInit(String apiKey,String APISecret,String base64In) {
+        base64 = base64In;
         if(IntegrationInterface.authoCallback!=null){
             authenticationCallback = IntegrationInterface.authoCallback;
         }
@@ -54,6 +56,8 @@ public class FacialAuthentication{
         }
     }
 
+
+
     private void startCapture(){
         Intent intent = new Intent(IntegrationInterface.act, VideoFaceCaptureActivity.class);
         intent.putExtra(VideoFaceCaptureActivity.EXTRA_UPPER_TEXT, "Authenticate Me");
@@ -78,14 +82,14 @@ public class FacialAuthentication{
     protected void processResult(int requestCode, int resultCode, Intent data) {
         // IntegrationInterface.act.onActivityResult(requestCode, resultCode, data);
         // if(requestCode == videoRequestCode && resultCode == RESULT_OK){
-        authenticateUser();
+        enrolUser();
         // }
     }
 
     private void authenticateUser(){
         try {
             System.out.println("manager is "+manager);
-            manager.sendProvidedFaceCapturesToAuthenticate(VideoFaceCaptureActivity.video, new FaceCapturesAuthenticateCallback() {
+            manager.sendProvidedFaceCapturesToAuthenticate(getBitMapArrayFromBase64(base64), new FaceCapturesAuthenticateCallback() {
 
                 @Override
                 public void success(FaceAuthenticateModel faceAuthenticateModel) {
@@ -115,9 +119,40 @@ public class FacialAuthentication{
     }
 
 
+    private ArrayList<Bitmap> getBitMapArrayFromBase64(String encodedImage){
+        ArrayList<Bitmap>  returnBitMap = new ArrayList<>();
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        System.out.println("done decoding byte ... decoded byte  is "+decodedByte);
+        returnBitMap.add(decodedByte);
+        return returnBitMap;
+    }
 
+    private void enrolUser() {
+        try {
+            Manager.getInstance().sendProvidedFaceCapturesToEnroll(VideoFaceCaptureActivity.video, new FaceCapturesEnrollCallback() {
+                @Override
+                public void success(FaceEnrollModel faceEnrollModel) {
+                    authenticateUser();
+                }
 
-
+                @Override
+                public void failure(VolleyError volleyError) {
+                    System.out.print("enrollment error .. "+volleyError.getMessage());
+                    authenticationCallback.onFailure(volleyError.getMessage());
+                }
+            });
+        } catch (InternalException e) {
+            System.out.print("enrollment error .."+e.getMessage());
+            authenticationCallback.onFailure(e.getMessage());
+        } catch (ConnectException e) {
+            System.out.print("enrollment error .. "+e.getMessage());
+            authenticationCallback.onFailure(e.getMessage());
+        } catch (SessionException e) {
+            System.out.print("enrollment error .."+e.getMessage());
+            authenticationCallback.onFailure(e.getMessage());
+        }
+    }
 
 
 
@@ -127,7 +162,7 @@ public class FacialAuthentication{
     private String getVerdict(FaceAuthenticateModel faceAuthenticateModel){
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  0.3;
+        Double facePassScore =  2.8;
         Double livinessPassScore =  1.0;
         String verdict = ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0))? "Passed Validation" : "Failed Validation";
         verdict = ((faceScore >=facePassScore) &&  (Double.compare(liviness,livinessPassScore)!=0))? verdict + " (Try blinking your eye after pressing the capture button). " : verdict;
@@ -137,7 +172,7 @@ public class FacialAuthentication{
     private boolean isValidFacialData(FaceAuthenticateModel faceAuthenticateModel){
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  0.3;
+        Double facePassScore =  2.8;
         Double livinessPassScore =  1.0;
         return ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0));
 
@@ -146,7 +181,7 @@ public class FacialAuthentication{
     private String getHeaderText(FaceAuthenticateModel faceAuthenticateModel){
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  0.3;
+        Double facePassScore =  2.8;
         Double livinessPassScore =  1.0;
         String verdict = ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0))? "Successful" : "Failed !!!";
         return verdict;
