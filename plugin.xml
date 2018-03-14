@@ -36,6 +36,6 @@
 <source-file src="src/android/IntegrationInterface.java" target-dir="src/com/fasyl/aimbrainplugin" />
 <source-file src="src/android/ActivityResultCallBackInterFace.java" target-dir="src/com/fasyl/aimbrainplugin" />
 <framework src="src/android/aimbrainCordova.gradle" custom="true" type="gradleReference" />
-<resource-file src="aimbrainSDK/aimbrain-sdk-v0.6.10.aar" target="libs/aimbrain-sdk-v0.6.10.aar" />
+<resource-file src="aimbrainSDK/aimbrain-sdk-v0.6.10.aar" target-dir="libs/aimbrain-sdk-v0.6.10.aar" />
 </platform>
 </plugin>	
