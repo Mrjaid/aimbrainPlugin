@@ -39,6 +39,7 @@ public class IntegrationInterface {
             @Override
             public void onSuccess(int authResult) {
                 authoCallback = null;
+                System.out.println("done my job reporting back.. auth is "+authResult);
                 callback.onSuccess(authResult);
             }
 

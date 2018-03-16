@@ -116,7 +116,6 @@ public class aimbrainPlugin extends CordovaPlugin {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        cordova.setActivityResultCallback(this);
         resultCallBack.onActivityResult(requestCode,resultCode,intent);
     }
 }

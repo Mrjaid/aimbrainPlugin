@@ -3,20 +3,26 @@ package com.fasyl.aimbrainplugin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import com.aimbrain.sdk.Manager;
 import com.aimbrain.sdk.exceptions.InternalException;
 import com.aimbrain.sdk.exceptions.SessionException;
 import com.aimbrain.sdk.faceCapture.VideoFaceCaptureActivity;
 import com.aimbrain.sdk.models.FaceAuthenticateModel;
+import com.aimbrain.sdk.models.FaceEnrollModel;
 import com.aimbrain.sdk.models.SessionModel;
 import com.aimbrain.sdk.server.FaceCapturesAuthenticateCallback;
+import com.aimbrain.sdk.server.FaceCapturesEnrollCallback;
 import com.aimbrain.sdk.server.SessionCallback;
 import com.android.volley.VolleyError;
 
 import java.net.ConnectException;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ImageAuthentication {
@@ -39,6 +45,10 @@ public class ImageAuthentication {
     private void initAimbrainSessionAndStartCapture(String userId,Context context,String apiKey,String APISecret){
         try {
             System.out.println("about to create session context  is"+context);
+            userId=userId.substring(0,5);
+            System.out.println("userId is "+userId);
+            System.out.println("API KEY is "+apiKey);
+            System.out.println("API Secret is "+APISecret);
             manager =  Manager.getInstance();
             manager.configure(apiKey, APISecret);
             manager.createSession(userId,context,new SessionCallback(){
@@ -119,8 +129,8 @@ public class ImageAuthentication {
     }
 
 
-    private ArrayList<Bitmap> getBitMapArrayFromBase64(String encodedImage){
-        ArrayList<Bitmap>  returnBitMap = new ArrayList<>();
+    private List<Bitmap> getBitMapArrayFromBase64(String encodedImage){
+        List<Bitmap>  returnBitMap = new ArrayList<>();
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         System.out.println("done decoding byte ... decoded byte  is "+decodedByte);
@@ -162,7 +172,7 @@ public class ImageAuthentication {
     private String getVerdict(FaceAuthenticateModel faceAuthenticateModel){
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  2.8;
+        Double facePassScore =  0.28;
         Double livinessPassScore =  1.0;
         String verdict = ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0))? "Passed Validation" : "Failed Validation";
         verdict = ((faceScore >=facePassScore) &&  (Double.compare(liviness,livinessPassScore)!=0))? verdict + " (Try blinking your eye after pressing the capture button). " : verdict;
@@ -170,18 +180,19 @@ public class ImageAuthentication {
     }
 
     private boolean isValidFacialData(FaceAuthenticateModel faceAuthenticateModel){
+        System.out.println("getting image verdict.. faceScore is "+ faceAuthenticateModel.getScore());
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  2.8;
+        Double facePassScore =  0.28;
         Double livinessPassScore =  1.0;
-        return ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0));
+        return ((Double.compare(faceScore,facePassScore)>=0));
 
     }
 
     private String getHeaderText(FaceAuthenticateModel faceAuthenticateModel){
         Double faceScore =  faceAuthenticateModel.getScore();
         Double liviness =  faceAuthenticateModel.getLiveliness();
-        Double facePassScore =  2.8;
+        Double facePassScore =  0.28;
         Double livinessPassScore =  1.0;
         String verdict = ((Double.compare(faceScore,facePassScore)>=0) && (Double.compare(liviness,livinessPassScore)==0))? "Successful" : "Failed !!!";
         return verdict;
