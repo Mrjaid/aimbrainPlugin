@@ -2,7 +2,7 @@
 <plugin id="com.fasyl.aimbrainplugin" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 <name>aimbrainPlugin</name>
 <js-module name="aimbrainPlugin" src="www/aimbrainPlugin.js">
-<clobbers target="aimbrainPlugin" />
+<clobbers target="cordova.plugins.aimbrainPlugin" />
 </js-module>
 <platform name="android">
 <config-file parent="/*" target="res/xml/config.xml">
