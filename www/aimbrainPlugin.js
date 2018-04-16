@@ -1,4 +1,3 @@
-cordova.define("com.fasyl.aimbrainplugin.aimbrainPlugin", function(require, exports, module) {
 module.exports = {
         enrol: function (userId,aimbrainAPIKey,aimbrainAPISecret, success, error) {
         var passParams = [];
@@ -23,4 +22,3 @@ module.exports = {
                      cordova.exec(success, error, 'aimbrainPlugin', "authenticateImage", passParams);
                }
     };
-});
